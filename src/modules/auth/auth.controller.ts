@@ -1,9 +1,6 @@
 import { Request, Response } from "express";
 import { logger } from "../../utils/logger";
-import {
-    authSuccessSchema,
-    authFailedSchema
-} from "./auth.schema";
+import { authResSchema } from "./auth.schema";
 import { signupReqSchema } from "./auth.schema";
 import { authService } from "./auth.service";
 import { ZodError } from "zod";
@@ -16,7 +13,7 @@ export const signupController = async (req: Request, res: Response) => {
         const result = await authService.signup(payload);
 
         // response must follow schema
-        const response = authSuccessSchema.parse({
+        const response = authResSchema.parse({
             success: true,
             message: "User signup successful",
             data: {
@@ -29,7 +26,7 @@ export const signupController = async (req: Request, res: Response) => {
 
         if (err instanceof ZodError) {
 
-            const response = authFailedSchema.parse({
+            const response = authResSchema.parse({
                 success: false,
                 message: "Invalid request payload",
                 errors: err.issues.map(e => ({
@@ -46,7 +43,7 @@ export const signupController = async (req: Request, res: Response) => {
             return res.status(400).json(response);
         }
 
-        const response = authFailedSchema.parse({
+        const response = authResSchema.parse({
             success: false,
             message: "Signup failed"
         });

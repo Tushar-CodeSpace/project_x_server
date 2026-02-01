@@ -1,5 +1,5 @@
 import { OpenAPIRegistry, OpenApiGeneratorV3 } from "@asteasolutions/zod-to-openapi";
-import { signupReqSchema, authSuccessSchema, authFailedSchema } from "../modules/auth/auth.schema";
+import { signupReqSchema, authResSchema } from "../modules/auth/auth.schema";
 
 const registry = new OpenAPIRegistry();
 
@@ -21,7 +21,7 @@ registry.registerPath({
             description: "Signup successful",
             content: {
                 "application/json": {
-                    schema: authSuccessSchema
+                    schema: authResSchema
                 }
             }
         },
@@ -29,7 +29,7 @@ registry.registerPath({
             description: "Signup fail",
             content: {
                 "application/json": {
-                    schema: authFailedSchema
+                    schema: authResSchema
                 }
             }
         }

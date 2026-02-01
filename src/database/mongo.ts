@@ -12,10 +12,9 @@ export const databaseOperations = {
         isConnected = true;
 
         logger.info({
-            type: "DATABASE",
-            message: "MongoDB connected",
-            host: conn.connection.host
-        });
+            host: conn.connection.host,
+            port: conn.connection.port
+        }, "MongoDB connected");
     },
 
     disconnect: async () => {
@@ -50,11 +49,9 @@ export const databaseOperations = {
             });
 
             logger.debug({
-                type: "CONFIG",
-                message: "Config loaded into memory"
-            });
+                ...config
+            }, "Config loaded into memory");
 
-            await databaseOperations.disconnect();
         } catch (err) {
             logger.error({
                 type: "CONFIG",
