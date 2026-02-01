@@ -3,50 +3,39 @@ import { extendZodWithOpenApi } from "@asteasolutions/zod-to-openapi";
 
 extendZodWithOpenApi(z);
 
-/* =====================
-   REQUEST SCHEMAS
-===================== */
-
-export const SignupSchema = z
+export const signupReqSchema = z
     .object({
-        email: z.string().email().openapi({ example: "user@gmail.com" }),
-        password: z.string().min(6).openapi({ example: "123456" })
-    })
-    .openapi("SignupRequest");
-
-export const SigninSchema = z
-    .object({
-        email: z.string().email(),
-        password: z.string().min(6)
-    })
-    .openapi("SigninRequest");
-
-export const ChangePasswordSchema = z
-    .object({
-        oldPassword: z.string(),
-        newPassword: z.string()
-    })
-    .openapi("ChangePasswordRequest");
-
-/* =====================
-   RESPONSE SCHEMAS
-===================== */
-
-export const SuccessResponseSchema = z
-    .object({
-        success: z.boolean().openapi({ example: true }),
-        message: z.string().openapi({ example: "user created successfully" }),
-        data: z.object({
-            _id: z.uuidv4(),
-            email: z.email(),
-            created_at: z.date()
+        email: z.string().email().openapi({
+            example: "user@example.com"
+        }),
+        password: z.string().min(6).openapi({
+            example: "123456"
         })
     })
-    .openapi("SuccessResponse");
+    .openapi("Signup Request");
 
-export const ErrorResponseSchema = z
+export const authSuccessSchema = z
     .object({
-        success: z.boolean().openapi({ example: false }),
-        message: z.string().openapi({ example: "user already exist" })
+        success: z.boolean().openapi({ example: true }),
+        message: z.string(),
+        data: z.object({
+            token: z.string().optional(),
+        }),
     })
-    .openapi("ErrorResponse");
+    .openapi("Auth Success Response");
+
+export const authFailedSchema = z
+    .object({
+        success: z.literal(false),
+        message: z.string(),
+        errors: z
+            .array(
+                z.object({
+                    path: z.array(z.string()),
+                    message: z.string()
+                })
+            )
+            .optional()
+    })
+    .openapi("AuthFailedResponse");
+

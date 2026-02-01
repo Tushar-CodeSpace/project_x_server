@@ -1,32 +1,18 @@
-import dotenv from 'dotenv';
-dotenv.config({ quiet: true });
-
 import express from "express";
 import swaggerUi from "swagger-ui-express";
-import { swaggerDocument } from "./swagger";
-import { logger } from "./utils/logger";
-import { loadConfig, appConfig } from './utils/loadConfig';
+import { openApiDocument } from "./docs/openapi";
+import authRouter from './modules/auth/auth.route';
 
-const startApplication = async () => {
-    try {
-        await loadConfig()
-        const port: number = appConfig.port;
+const app = express();
 
-        const app = express();
+app.use(express.json());
 
-        app.use(express.json());
+app.use("/docs", swaggerUi.serve, swaggerUi.setup(openApiDocument));
 
-        app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.get("/", (_req, res) => {
+    res.json({ status: "API running" });
+});
 
-        app.listen(port, () => {
-            logger.info("Application is online...");
-            logger.info({ url: `http://localhost:${port}/docs` }, "Check docs for help.")
-        });
-    } catch (error) {
-        logger.error(error)
-    }
-}
+app.use('/api/v1/auth', authRouter);
 
-startApplication()
-
-
+export default app;
