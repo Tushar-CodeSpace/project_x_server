@@ -6,7 +6,7 @@ export const logger = pino({
         target: "pino-pretty",
         options: {
             colorize: true,
-            translateTime: "SYS:yyyy-MM-dd HH:mm:ss.l",
+            translateTime: "SYS:yyyy-mm-dd HH:MM:ss.l",
         },
     },
 });
