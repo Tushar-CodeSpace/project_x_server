@@ -14,6 +14,18 @@ export const signupReqSchema = z
     })
     .openapi("SignupRequest");
 
+export const signinReqSchema = z
+    .object({
+        email: z.string().email().openapi({
+            example: "user@example.com"
+        }),
+        password: z.string().min(6).openapi({
+            example: "123456"
+        })
+    })
+    .openapi("SigninRequest");
+
+
 export const authResSchema = z
     .object({
         success: z.boolean(),
