@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
+import { v4 as uuidv4 } from "uuid";
 
 export interface IUser {
+    _id: string;
     email: string;
     password: string;
     createdAt: Date;
@@ -8,12 +10,17 @@ export interface IUser {
 
 const userSchema = new mongoose.Schema<IUser>(
     {
+        _id: {
+            type: String,
+            default: () => uuidv4()
+        },
+
         email: {
             type: String,
             required: true,
+            unique: true,
             lowercase: true,
-            trim: true,
-            unique: true
+            trim: true
         },
 
         password: {
