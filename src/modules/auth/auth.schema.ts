@@ -12,34 +12,24 @@ export const signupReqSchema = z
             example: "123456"
         })
     })
-    .openapi("Signup Request");
-
-// export const authResSchema = z
-//     .object({
-//         success: z.boolean().openapi({ example: true }),
-//         message: z.string(),
-//         data: z.object({
-//             token: z.string().optional(),
-//         }),
-//     })
-//     .openapi("Auth Success Response");
+    .openapi("SignupRequest");
 
 export const authResSchema = z
     .object({
-        success: z.literal(false),
+        success: z.boolean(),
         message: z.string(),
-        data: z.object({
-            token: z.string().optional(),
-        })
+        data: z
+            .object({
+                token: z.string().optional()
+            })
             .optional(),
         errors: z
             .array(
                 z.object({
                     path: z.array(z.string()),
-                    message: z.string(),
+                    message: z.string()
                 })
             )
             .optional()
     })
-    .openapi("Auth Response");
-
+    .openapi("AuthResponse");

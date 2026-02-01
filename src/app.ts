@@ -1,11 +1,14 @@
 import express from "express";
 import swaggerUi from "swagger-ui-express";
+import cookieParser from "cookie-parser";
+
 import { openApiDocument } from "./docs/openapi";
 import authRouter from './modules/auth/auth.route';
 
 const app = express();
 
 app.use(express.json());
+app.use(cookieParser());
 
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(openApiDocument));
 
