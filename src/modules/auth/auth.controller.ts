@@ -142,3 +142,31 @@ export const signinController = async (req: Request, res: Response) => {
         );
     }
 };
+
+export const logoutController = async (_req: Request, res: Response) => {
+    try {
+        // 🍪 clear cookie
+        res.clearCookie("access_token", {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "strict"
+        });
+
+        // 🔐 clear auth header (optional)
+        res.setHeader("Authorization", "");
+
+        const response = authResSchema.parse({
+            success: true,
+            message: "Logged out successfully"
+        });
+
+        return res.status(200).json(response);
+    } catch (err: any) {
+        return res.status(500).json(
+            authResSchema.parse({
+                success: false,
+                message: "Logout failed"
+            })
+        );
+    }
+};
